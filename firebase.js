@@ -45,7 +45,7 @@ async function setDocs(collectionName, docs) {
   //var batch = db.batch();
 
   for (const doc of docs) {
-    await setDoc(doc, collectionName);
+    await setDoc(collectionName, doc);
   }
 
   //batch.commit();
