@@ -20,7 +20,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = firestore.getFirestore(app);
 
-// Get a list of cities from your database
+// Get single doc
+async function getDoc(collectionName, docId) {
+  const docRef = firestore.doc(db, collectionName, docId);
+  const docSnap = await firestore.getDoc(docRef);
+
+  if (docSnap.exists()) {
+    console.log(docSnap.data());
+
+    console.log("GET DOC OK");
+    return docSnap.data();
+  } else {
+    // docSnap.data() will be undefined in this case
+    console.log("No such document!");
+    return {};
+  }
+}
+
+// Get multiple docs
 async function getDocs(collectionName) {
   const collectionData = firestore.collection(db, collectionName);
   const collectionSnapshot = await firestore.getDocs(collectionData);
@@ -35,9 +52,9 @@ async function setDoc(collectionName, doc) {
       updated: firestore.serverTimestamp(),
     });
 
-    console.log("Document successfully written!");
+    console.log("DOC WRITE OK");
   } catch (error) {
-    console.error("Error writing document: ", error);
+    console.error("DOC WRITE ERROR: ", error);
   }
 }
 
@@ -51,4 +68,4 @@ async function setDocs(collectionName, docs) {
   //batch.commit();
 }
 
-module.exports = { getDocs, setDoc, setDocs };
+module.exports = { getDoc, getDocs, setDoc, setDocs };
